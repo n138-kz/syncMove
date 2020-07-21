@@ -83,4 +83,5 @@ for srcDirs in (pathlib.Path(str(dirSrc)).iterdir()):
     findDir = pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc))).exists()
 
     if findDir != True:
-        print('mv "' + str(srcDirs) + '" "' + str(dirDst) + '"')
+        print(str(srcDirs.relative_to(dirSrc)))
+        shutil.move(str(srcDirs), str(dirDst))
