@@ -80,9 +80,7 @@ for srcDirs in (pathlib.Path(str(dirSrc)).iterdir()):
     if not srcDirs.is_dir():
         continue
 
-    for dstDirs in (pathlib.Path(str(dirDst)).iterdir()):
-        if srcDirs.relative_to(dirSrc) == dstDirs.relative_to(dirDst):
-            findDir = True
-            continue
+    findDir = pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc))).exists()
+
     if findDir != True:
         print('mv "' + str(srcDirs) + '" "' + str(dirDst) + '"')
