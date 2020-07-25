@@ -83,5 +83,5 @@ for srcDirs in (pathlib.Path(str(dirSrc)).iterdir()):
     findDir = pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc))).exists()
 
     if findDir != True:
-        print(str(srcDirs.relative_to(dirSrc)))
+        print('Transferring... \'' + str(srcDirs.relative_to(dirSrc)) + '\'')
         shutil.move(str(srcDirs), str(dirDst))
