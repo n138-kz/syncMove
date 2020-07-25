@@ -4,6 +4,7 @@ import sys
 import argparse
 import pathlib
 import shutil
+from tqdm import tqdm
 
 for c in range((shutil.get_terminal_size().columns-1)):
     print('-', end='')
