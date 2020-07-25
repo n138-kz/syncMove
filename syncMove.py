@@ -85,5 +85,4 @@ for srcDirs in (pathlib.Path(str(dirSrc)).iterdir()):
 
     if findDir != True:
         print('Transferring... \'' + str(srcDirs.relative_to(dirSrc)) + '\'')
-        for dirMove in tqdm( shutil.move(str(srcDirs), str(dirDst)) ):
-            pass
+        shutil.move(str(srcDirs), str(dirDst))
