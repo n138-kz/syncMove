@@ -90,6 +90,9 @@ for srcDirs in (pathlib.Path(str(dirSrc)).iterdir()):
 
     if findDir != True:
         print('Transferring... \'' + str(srcDirs.relative_to(dirSrc)) + '\'')
+        if args.debug == True:
+            print('                 ' + 'From ' + str(srcDirs) )
+            print('                 ' + 'To   ' + str(dirDst) )
         shutil.move(str(srcDirs), str(dirDst))
     else:
         for srcChildrenDirs in (pathlib.Path(str(srcDirs)).iterdir()):
