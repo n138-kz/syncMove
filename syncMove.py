@@ -35,6 +35,11 @@ parser.add_argument('dirDst',
 
 args = parser.parse_args()
 
+if args.debug == True:
+    print(' !!>> ---------------------- <<!! ' + '')
+    print(' !!>>  Debug mode is Active  <<!! ' + '')
+    print(' !!>> ---------------------- <<!! ' + '\n\n')
+
 # Is Exist
 dirSrc = str(args.dirSrc[0])
 if not pathlib.Path(str(dirSrc)).exists():
@@ -76,6 +81,7 @@ if run3 != 'y' and run3 != 'yes' :
 for srcDirs in (pathlib.Path(str(dirSrc)).iterdir()):
     #print(str(srcDirs) + ': ', end='')
     findDir = False
+    findChildrenDir = False
 
     if not srcDirs.is_dir():
         continue
@@ -85,3 +91,21 @@ for srcDirs in (pathlib.Path(str(dirSrc)).iterdir()):
     if findDir != True:
         print('Transferring... \'' + str(srcDirs.relative_to(dirSrc)) + '\'')
         shutil.move(str(srcDirs), str(dirDst))
+    else:
+        for srcChildrenDirs in (pathlib.Path(str(srcDirs)).iterdir()):
+
+            if not srcChildrenDirs.is_dir():
+                continue
+
+            findChildrenDir = pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) ))).exists()
+
+            if findChildrenDir != True:
+                print('Transferring... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
+                if args.debug == True:
+                    print('                 ' + 'From ' + str(srcChildrenDirs) )
+                    print('                 ' + 'To   ' + str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))) )
+                shutil.move(str(srcChildrenDirs), str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))))
+
+            else:
+                if args.debug == True:
+                    print('Already exist. Nothing to do... ' + str(srcChildrenDirs.relative_to(dirSrc)) )
