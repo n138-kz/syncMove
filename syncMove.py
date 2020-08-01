@@ -73,42 +73,46 @@ if not pathlib.Path(str(dirDst)).is_dir():
 print('Src: ' + str(pathlib.Path(str(dirSrc)).resolve()))
 print('Dst: ' + str(pathlib.Path(str(dirDst)).resolve()))
 
-run3 = str(input('Is this OK [y/N]: '))
-run3 = run3.lower().strip()
-if run3 != 'y' and run3 != 'yes' :
+try:
+    run3 = str(input('Is this OK [y/N]: '))
+    run3 = run3.lower().strip()
+    if run3 != 'y' and run3 != 'yes' :
+        sys.exit(1)
+
+    for srcDirs in (pathlib.Path(str(dirSrc)).iterdir()):
+        #print(str(srcDirs) + ': ', end='')
+        findDir = False
+        findChildrenDir = False
+
+        if not srcDirs.is_dir():
+            continue
+
+        findDir = pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc))).exists()
+
+        if findDir != True:
+            print('Transferring... \'' + str(srcDirs.relative_to(dirSrc)) + '\'')
+            if args.debug == True:
+                print('                 ' + 'From ' + str(srcDirs) )
+                print('                 ' + 'To   ' + str(dirDst) )
+            shutil.move(str(srcDirs), str(dirDst))
+        else:
+            for srcChildrenDirs in (pathlib.Path(str(srcDirs)).iterdir()):
+
+                if not srcChildrenDirs.is_dir():
+                    continue
+
+                findChildrenDir = pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) ))).exists()
+
+                if findChildrenDir != True:
+                    print('Transferring... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
+                    if args.debug == True:
+                        print('                 ' + 'From ' + str(srcChildrenDirs) )
+                        print('                 ' + 'To   ' + str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))) )
+                    shutil.move(str(srcChildrenDirs), str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))))
+
+                else:
+                    if args.debug == True:
+                        print('Already exist. Nothing to do... ' + str(srcChildrenDirs.relative_to(dirSrc)) )
+except KeyboardInterrupt:
+    print('^C')
     sys.exit(1)
-
-for srcDirs in (pathlib.Path(str(dirSrc)).iterdir()):
-    #print(str(srcDirs) + ': ', end='')
-    findDir = False
-    findChildrenDir = False
-
-    if not srcDirs.is_dir():
-        continue
-
-    findDir = pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc))).exists()
-
-    if findDir != True:
-        print('Transferring... \'' + str(srcDirs.relative_to(dirSrc)) + '\'')
-        if args.debug == True:
-            print('                 ' + 'From ' + str(srcDirs) )
-            print('                 ' + 'To   ' + str(dirDst) )
-        shutil.move(str(srcDirs), str(dirDst))
-    else:
-        for srcChildrenDirs in (pathlib.Path(str(srcDirs)).iterdir()):
-
-            if not srcChildrenDirs.is_dir():
-                continue
-
-            findChildrenDir = pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) ))).exists()
-
-            if findChildrenDir != True:
-                print('Transferring... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
-                if args.debug == True:
-                    print('                 ' + 'From ' + str(srcChildrenDirs) )
-                    print('                 ' + 'To   ' + str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))) )
-                shutil.move(str(srcChildrenDirs), str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))))
-
-            else:
-                if args.debug == True:
-                    print('Already exist. Nothing to do... ' + str(srcChildrenDirs.relative_to(dirSrc)) )
