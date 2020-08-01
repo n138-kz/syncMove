@@ -4,6 +4,8 @@ import sys
 import argparse
 import pathlib
 import shutil
+import time
+import threading
 
 for c in range((shutil.get_terminal_size().columns-1)):
     print('-', end='')
@@ -83,6 +85,8 @@ try:
         #print(str(srcDirs) + ': ', end='')
         findDir = False
         findChildrenDir = False
+        procTimer = time.time()
+        transfer = ''
 
         if not srcDirs.is_dir():
             continue
@@ -91,10 +95,19 @@ try:
 
         if findDir != True:
             print('Transferring... \'' + str(srcDirs.relative_to(dirSrc)) + '\'')
+
             if args.debug == True:
-                print('                 ' + 'From ' + str(srcDirs) )
-                print('                 ' + 'To   ' + str(dirDst) )
-            shutil.move(str(srcDirs), str(dirDst))
+                print('                 ' + 'From    ' + str(srcDirs) )
+                print('                 ' + 'To      ' + str(dirDst) )
+
+            transfer = shutil.move(str(srcDirs), str(dirDst))
+            if len(str(transfer)) > 0:
+                transfer = 'Done'
+            else:
+                transfer = 'Fail'
+
+            if args.debug == True:
+                print('    [' + transfer + ']       ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
         else:
             for srcChildrenDirs in (pathlib.Path(str(srcDirs)).iterdir()):
 
@@ -105,10 +118,15 @@ try:
 
                 if findChildrenDir != True:
                     print('Transferring... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
+
                     if args.debug == True:
                         print('                 ' + 'From ' + str(srcChildrenDirs) )
                         print('                 ' + 'To   ' + str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))) )
-                    shutil.move(str(srcChildrenDirs), str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))))
+
+                    transfer = shutil.move(str(srcChildrenDirs), str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))))
+
+                    if args.debug == True:
+                        print('    [' + transfer + ']       ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
 
                 else:
                     if args.debug == True:
