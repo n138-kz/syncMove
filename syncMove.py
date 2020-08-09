@@ -124,6 +124,10 @@ try:
                         print('                 ' + 'To   ' + str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))) )
 
                     transfer = shutil.move(str(srcChildrenDirs), str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))))
+                    if len(str(transfer)) > 0:
+                        transfer = 'Done'
+                    else:
+                        transfer = 'Fail'
 
                     if args.debug == True:
                         print('    [' + transfer + ']       ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
