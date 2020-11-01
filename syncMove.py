@@ -75,6 +75,17 @@ if not pathlib.Path(str(dirDst)).is_dir():
 print('Src: ' + str(pathlib.Path(str(dirSrc)).resolve()))
 print('Dst: ' + str(pathlib.Path(str(dirDst)).resolve()))
 
+
+
+
+
+def tran(srcDirs, dirDst):
+    shutil.move(str(srcDirs), str(dirDst))
+
+
+
+
+
 try:
     run3 = str(input('Is this OK [y/N]: '))
     run3 = run3.lower().strip()
@@ -100,11 +111,10 @@ try:
                 print('                 ' + 'From    ' + str(srcDirs) )
                 print('                 ' + 'To      ' + str(dirDst) )
 
-            transfer = shutil.move(str(srcDirs), str(dirDst))
-            if len(str(transfer)) > 0:
-                transfer = 'Done'
-            else:
-                transfer = 'Fail'
+            if __name__ == '__main__':
+                thread1 = threading.Thread(target=tran, kwargs={'srcDirs': str(srcDirs), 'dirDst': str(dirDst)})
+                thread1.start()
+                thread1.join()
 
             if args.debug == True:
                 print('                 ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
@@ -125,11 +135,10 @@ try:
                         print('                 ' + 'From ' + str(srcChildrenDirs) )
                         print('                 ' + 'To   ' + str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))) )
 
-                    transfer = shutil.move(str(srcChildrenDirs), str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))))
-                    if len(str(transfer)) > 0:
-                        transfer = 'Done'
-                    else:
-                        transfer = 'Fail'
+                    if __name__ == '__main__':
+                        thread1 = threading.Thread(target=tran, kwargs={'srcDirs': str(srcChildrenDirs), 'dirDst': str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) ))))})
+                        thread1.start()
+                        thread1.join()
 
                     if args.debug == True:
                         print('                 ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
