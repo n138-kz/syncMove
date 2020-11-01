@@ -113,8 +113,8 @@ try:
             print('Transferring... \'' + str(srcDirs.relative_to(dirSrc)) + '\'')
 
             if args.debug == True:
-                print('                 ' + 'From    ' + str(srcDirs) )
-                print('                 ' + 'To      ' + str(dirDst) )
+                print('   ' + 'From    ' + str(srcDirs) )
+                print('   ' + 'To      ' + str(dirDst) )
 
             if __name__ == '__main__':
                 thread1 = threading.Thread(target=tran, kwargs={'srcDirs': str(srcDirs), 'dirDst': str(dirDst)})
@@ -140,8 +140,8 @@ try:
                     print('Transferring... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
 
                     if args.debug == True:
-                        print('                 ' + 'From ' + str(srcChildrenDirs) )
-                        print('                 ' + 'To   ' + str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))) )
+                        print('   ' + 'From ' + str(srcChildrenDirs) )
+                        print('   ' + 'To   ' + str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))) )
 
                     if __name__ == '__main__':
                         thread1 = threading.Thread(target=tran, kwargs={'srcDirs': str(srcChildrenDirs), 'dirDst': str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) ))))})
@@ -155,12 +155,16 @@ try:
                     if args.debug == True:
                         logg_time=datetime.datetime.now()
                         print(str(logg_time.hour).zfill(2) + ':' + str(logg_time.minute).zfill(2) + ':' + str(logg_time.second).zfill(2) + '.' + '{:0<3}'.format(int(logg_time.microsecond/1000)) + ' ', end='')
-                    print('Skipping....... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
+
+                    if args.debug == True:
+                        print('Skipping....... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
 
         if args.debug == True:
             logg_time=datetime.datetime.now()
             print(str(logg_time.hour).zfill(2) + ':' + str(logg_time.minute).zfill(2) + ':' + str(logg_time.second).zfill(2) + '.' + '{:0<3}'.format(int(logg_time.microsecond/1000)) + ' ', end='')
-        print('Skipping....... \'' + str(srcDirs.relative_to(dirSrc)) + '\'')
+
+        if args.debug == True:
+            print('Skipping....... \'' + str(srcDirs.relative_to(dirSrc)) + '\'')
 
 except KeyboardInterrupt:
     print('^C')
