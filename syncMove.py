@@ -107,7 +107,9 @@ try:
                 transfer = 'Fail'
 
             if args.debug == True:
-                print('    [' + transfer + ']       ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
+                print('                 ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
+
+            continue
         else:
             for srcChildrenDirs in (pathlib.Path(str(srcDirs)).iterdir()):
 
@@ -130,11 +132,11 @@ try:
                         transfer = 'Fail'
 
                     if args.debug == True:
-                        print('    [' + transfer + ']       ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
+                        print('                 ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
 
                 else:
-                    if args.debug == True:
-                        print('Already exist. Nothing to do... ' + str(srcChildrenDirs.relative_to(dirSrc)) )
+                    print('Skipping....... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
+        print('Skipping....... \'' + str(srcDirs.relative_to(dirSrc)) + '\'')
 except KeyboardInterrupt:
     print('^C')
     sys.exit(1)

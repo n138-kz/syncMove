@@ -1,4 +1,0 @@
-cmd引数に MoveFrom, MoveTo を指定
-MoveTo フォルダ内に MoveFrom があるか確認→①
-①あるとき...何もしない
-①ないとき...移動実施
