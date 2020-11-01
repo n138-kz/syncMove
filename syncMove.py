@@ -113,8 +113,8 @@ try:
             print('Transferring... \'' + str(srcDirs.relative_to(dirSrc)) + '\'')
 
             if args.debug == True:
-                print('   ' + 'From    ' + str(srcDirs) )
-                print('   ' + 'To      ' + str(dirDst) )
+                print('   ' + 'From    ' + ': ' + str(srcDirs) )
+                print('   ' + 'To      ' + ': ' + str(dirDst) )
 
             if __name__ == '__main__':
                 thread1 = threading.Thread(target=tran, kwargs={'srcDirs': str(srcDirs), 'dirDst': str(dirDst)})
@@ -122,7 +122,7 @@ try:
                 thread1.join()
 
             if args.debug == True:
-                print('   ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
+                print('   ' + 'Elapsed ' + ': ' + str(round(time.time() - procTimer, 5)) + 's' )
 
             continue
         else:
@@ -140,8 +140,8 @@ try:
                     print('Transferring... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
 
                     if args.debug == True:
-                        print('   ' + 'From ' + str(srcChildrenDirs) )
-                        print('   ' + 'To   ' + str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))) )
+                        print('   ' + 'From    ' + ': ' + str(srcChildrenDirs) )
+                        print('   ' + 'To      ' + ': ' + str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))) )
 
                     if __name__ == '__main__':
                         thread1 = threading.Thread(target=tran, kwargs={'srcDirs': str(srcChildrenDirs), 'dirDst': str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) ))))})
@@ -149,7 +149,7 @@ try:
                         thread1.join()
 
                     if args.debug == True:
-                        print('   ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
+                        print('   ' + 'Elapsed ' + ': ' + str(round(time.time() - procTimer, 5)) + 's' )
 
                 else:
                     if args.debug == True:
