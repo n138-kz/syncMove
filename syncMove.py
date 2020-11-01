@@ -98,7 +98,7 @@ try:
         #print(str(srcDirs) + ': ', end='')
         findDir = False
         findChildrenDir = False
-        procTimer = time.time()
+        procTimer = datetime.datetime.now()
         transfer = ''
 
         if not srcDirs.is_dir():
@@ -122,7 +122,7 @@ try:
                 thread1.join()
 
             if args.debug == True:
-                print('   ' + 'Elapsed ' + ': ' + str(round(time.time() - procTimer, 5)) + 's' )
+                print('   ' + 'Elapsed ' + ': ' + str((datetime.datetime.now() - procTimer).seconds) + 's' )
 
             continue
         else:
@@ -149,7 +149,7 @@ try:
                         thread1.join()
 
                     if args.debug == True:
-                        print('   ' + 'Elapsed ' + ': ' + str(round(time.time() - procTimer, 5)) + 's' )
+                        print('   ' + 'Elapsed ' + ': ' + str((datetime.datetime.now() - procTimer).seconds) + 's' )
 
                 else:
                     if args.debug == True:
