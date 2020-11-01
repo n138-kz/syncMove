@@ -5,6 +5,7 @@ import argparse
 import pathlib
 import shutil
 import time
+import datetime
 import threading
 
 for c in range((shutil.get_terminal_size().columns-1)):
@@ -82,7 +83,8 @@ print('Dst: ' + str(pathlib.Path(str(dirDst)).resolve()))
 def tran(srcDirs, dirDst):
     shutil.move(str(srcDirs), str(dirDst))
 
-
+def elapsed_timer():
+    pass
 
 
 
@@ -105,6 +107,9 @@ try:
         findDir = pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc))).exists()
 
         if findDir != True:
+            if args.debug == True:
+                logg_time=datetime.datetime.now()
+                print(str(logg_time.hour).zfill(2) + ':' + str(logg_time.minute).zfill(2) + ':' + str(logg_time.second).zfill(2) + '.' + '{:0<3}'.format(int(logg_time.microsecond/1000)) + ' ', end='')
             print('Transferring... \'' + str(srcDirs.relative_to(dirSrc)) + '\'')
 
             if args.debug == True:
@@ -129,6 +134,9 @@ try:
                 findChildrenDir = pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) ))).exists()
 
                 if findChildrenDir != True:
+                    if args.debug == True:
+                        logg_time=datetime.datetime.now()
+                        print(str(logg_time.hour).zfill(2) + ':' + str(logg_time.minute).zfill(2) + ':' + str(logg_time.second).zfill(2) + '.' + '{:0<3}'.format(int(logg_time.microsecond/1000)) + ' ', end='')
                     print('Transferring... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
 
                     if args.debug == True:
@@ -144,8 +152,16 @@ try:
                         print('                 ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
 
                 else:
+                    if args.debug == True:
+                        logg_time=datetime.datetime.now()
+                        print(str(logg_time.hour).zfill(2) + ':' + str(logg_time.minute).zfill(2) + ':' + str(logg_time.second).zfill(2) + '.' + '{:0<3}'.format(int(logg_time.microsecond/1000)) + ' ', end='')
                     print('Skipping....... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
+
+        if args.debug == True:
+            logg_time=datetime.datetime.now()
+            print(str(logg_time.hour).zfill(2) + ':' + str(logg_time.minute).zfill(2) + ':' + str(logg_time.second).zfill(2) + '.' + '{:0<3}'.format(int(logg_time.microsecond/1000)) + ' ', end='')
         print('Skipping....... \'' + str(srcDirs.relative_to(dirSrc)) + '\'')
+
 except KeyboardInterrupt:
     print('^C')
     sys.exit(1)
