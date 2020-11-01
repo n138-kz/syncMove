@@ -122,7 +122,7 @@ try:
                 thread1.join()
 
             if args.debug == True:
-                print('                 ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
+                print('   ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
 
             continue
         else:
@@ -149,7 +149,7 @@ try:
                         thread1.join()
 
                     if args.debug == True:
-                        print('                 ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
+                        print('   ' + 'Elapsed ' + str(round(time.time() - procTimer, 5)) + 's' )
 
                 else:
                     if args.debug == True:
