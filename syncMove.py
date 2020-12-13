@@ -107,6 +107,9 @@ try:
         findDir = pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc))).exists()
 
         if findDir != True:
+            os.makedirs(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)))
+
+        if False:
             if args.debug == True:
                 logg_time=datetime.datetime.now()
                 print(str(logg_time.hour).zfill(2) + ':' + str(logg_time.minute).zfill(2) + ':' + str(logg_time.second).zfill(2) + '.' + '{:0<3}'.format(int(logg_time.microsecond/1000)) + ' ', end='')
@@ -158,6 +161,10 @@ try:
 
                     if args.debug == True:
                         print('Skipping....... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
+            try:
+                os.rmdir(str(srcDirs))
+            except OSError as e:
+                pass
 
         if args.debug == True:
             logg_time=datetime.datetime.now()
