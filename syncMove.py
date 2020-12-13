@@ -131,6 +131,7 @@ try:
             continue
         else:
             for srcChildrenDirs in (pathlib.Path(str(srcDirs)).iterdir()):
+                procTimer = datetime.datetime.now()
 
                 if not srcChildrenDirs.is_dir():
                     continue
