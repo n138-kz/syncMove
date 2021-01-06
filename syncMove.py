@@ -198,10 +198,6 @@ try:
             except OSError as e:
                 pass
 
-        if args.debug == True:
-            logg_time=datetime.datetime.now()
-            print(str(logg_time.hour).zfill(2) + ':' + str(logg_time.minute).zfill(2) + ':' + str(logg_time.second).zfill(2) + '.' + '{:0<3}'.format(int(logg_time.microsecond/1000)) + ' ', end='')
-
 except KeyboardInterrupt:
     print('^C')
     sys.exit(1)
