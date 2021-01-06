@@ -161,8 +161,38 @@ try:
                         logg_time=datetime.datetime.now()
                         print(str(logg_time.hour).zfill(2) + ':' + str(logg_time.minute).zfill(2) + ':' + str(logg_time.second).zfill(2) + '.' + '{:0<3}'.format(int(logg_time.microsecond/1000)) + ' ', end='')
 
+                    print('Skipping....... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
                     if args.debug == True:
-                        print('Skipping....... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
+
+                        print('            ' + 'File count check: ',end='')
+                        tmp_internal_filesCount=[0, 0];
+                        for tmp_dirpath in [
+                            [
+                                'Src',
+                                str(srcChildrenDirs),
+                                0,
+                            ],
+                            [
+                                'Dst',
+                                str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))),
+                                0,
+                            ],
+                        ] :
+                            tmp_dirpath[2]=sum(os.path.isfile(os.path.join(str(tmp_dirpath[1]), name)) for name in os.listdir(str(tmp_dirpath[1])))
+                            if tmp_dirpath[0]=='Src':
+                                tmp_internal_filesCount=[tmp_dirpath[2], 0]
+                            else:
+                                if tmp_dirpath[0]=='Dst':
+                                    tmp_internal_filesCount[1]=tmp_dirpath[2]
+
+                        if tmp_internal_filesCount[0]==tmp_internal_filesCount[1]:
+                            print('The same as destination.')
+                        else:
+                            print('There isn\'t same as destination. ')
+                            print('            ' + 'Src: '+str(tmp_internal_filesCount[0]))
+                            print('            ' + 'Dst: '+str(tmp_internal_filesCount[1]))
+
+
             try:
                 os.rmdir(str(srcDirs))
             except OSError as e:
@@ -171,9 +201,6 @@ try:
         if args.debug == True:
             logg_time=datetime.datetime.now()
             print(str(logg_time.hour).zfill(2) + ':' + str(logg_time.minute).zfill(2) + ':' + str(logg_time.second).zfill(2) + '.' + '{:0<3}'.format(int(logg_time.microsecond/1000)) + ' ', end='')
-
-        if args.debug == True:
-            print('Skipping....... \'' + str(srcDirs.relative_to(dirSrc)) + '\'')
 
 except KeyboardInterrupt:
     print('^C')
