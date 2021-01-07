@@ -22,6 +22,13 @@ parser.add_argument('--debug',
                     action='store_true',
                    )
 
+parser.add_argument('--trash',
+                    help='Trash dir.',
+                    nargs=1,
+                    default=None,
+                    metavar='TRASH',
+                   )
+
 parser.add_argument('dirSrc',
                     nargs=1,
                     default=None,
@@ -37,11 +44,6 @@ parser.add_argument('dirDst',
                    )
 
 args = parser.parse_args()
-
-if args.debug == True:
-    print(' !!>> ---------------------- <<!! ' + '')
-    print(' !!>>  Debug mode is Active  <<!! ' + '')
-    print(' !!>> ---------------------- <<!! ' + '\n\n')
 
 # Is Exist
 dirSrc = str(args.dirSrc[0])
@@ -72,6 +74,29 @@ if not pathlib.Path(str(dirDst)).is_dir():
     print('          ' + str(dirDst))
     parser.print_usage()
     sys.exit(1)
+
+dirRecycleBin = None
+if(args.trash is not None):
+    dirRecycleBin = str(args.trash[0])
+    # Is Exist
+    if not pathlib.Path(str(dirRecycleBin)).exists():
+        print('[ERROR]>> No such a directory.')
+        print('          ' + str(dirRecycleBin))
+        parser.print_usage()
+        sys.exit(1)
+
+    # Is Dir
+    if not pathlib.Path(str(dirRecycleBin)).is_dir():
+        print('[ERROR]>> Is a not directory.')
+        print('          ' + str(dirRecycleBin))
+        parser.print_usage()
+        sys.exit(1)
+
+    print(' !!>> --------------- <<!! ' + '')
+    print(' !!>>  --trash is On  <<!! ' + '')
+    print(' !!>> --------------- <<!! ' + '')
+    print(str(dirRecycleBin))
+    print('\n')
 
 print('Src: ' + str(pathlib.Path(str(dirSrc)).resolve()))
 print('Dst: ' + str(pathlib.Path(str(dirDst)).resolve()))
@@ -164,7 +189,7 @@ try:
                     print('Skipping....... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
                     if args.debug == True:
 
-                        print('            ' + 'File count check: ',end='')
+                        print('             ' + 'File count check: ',end='')
                         tmp_internal_filesCount=[0, 0];
                         for tmp_dirpath in [
                             [
@@ -187,10 +212,33 @@ try:
 
                         if tmp_internal_filesCount[0]==tmp_internal_filesCount[1]:
                             print('The same as destination.')
+
+                            if(args.trash is not None):
+
+                                print('             Transferring... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
+                                print('                          To \'' + str(dirRecycleBin) + '\'')
+
+                                if __name__ == '__main__':
+                                    thread1 = threading.Thread(target=tran, kwargs={'srcDirs': str(srcChildrenDirs), 'dirDst': str(pathlib.Path(str(dirRecycleBin) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' ))})
+                                    thread1.start()
+                                    thread1.join()
+
                         else:
                             print('There isn\'t same as destination. ')
-                            print('            ' + 'Src: '+str(tmp_internal_filesCount[0]))
-                            print('            ' + 'Dst: '+str(tmp_internal_filesCount[1]))
+                            print('             ' + 'Src: '+str(tmp_internal_filesCount[0]))
+                            print('             ' + 'Dst: '+str(tmp_internal_filesCount[1]))
+
+                            if(args.trash is not None):
+                                if( tmp_internal_filesCount[0] < tmp_internal_filesCount[1] ):
+
+                                    print('             Transferring... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
+                                    print('                          To \'' + str(dirRecycleBin) + '\'')
+
+                                    if __name__ == '__main__':
+                                        thread1 = threading.Thread(target=tran, kwargs={'srcDirs': str(srcChildrenDirs), 'dirDst': str(pathlib.Path(str(dirRecycleBin) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' ))})
+                                        thread1.start()
+                                        thread1.join()
+
 
 
             try:
