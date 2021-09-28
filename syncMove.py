@@ -29,6 +29,12 @@ parser.add_argument('--trash',
                     metavar='TRASH',
                    )
 
+parser.add_argument('--duplicatecsv',
+                    help='Generate list a Duplicated Dirs.',
+                    action='store_true',
+                    default=False,
+                   )
+
 parser.add_argument('dirSrc',
                     nargs=1,
                     default=None,
@@ -98,6 +104,12 @@ if(args.trash is not None):
     print(str(dirRecycleBin))
     print('\n')
 
+if(args.duplicatecsv is True):
+    print(' !!>> ---------------------- <<!! ' + '')
+    print(' !!>>  --duplicatecsv is On  <<!! ' + '')
+    print(' !!>> ---------------------- <<!! ' + '')
+    print('\n')
+
 print('Src: ' + str(pathlib.Path(str(dirSrc)).resolve()))
 print('Dst: ' + str(pathlib.Path(str(dirDst)).resolve()))
 
@@ -145,10 +157,11 @@ try:
                 print('   ' + 'From    ' + ': ' + str(srcDirs) )
                 print('   ' + 'To      ' + ': ' + str(dirDst) )
 
-            if __name__ == '__main__':
-                thread1 = threading.Thread(target=tran, kwargs={'srcDirs': str(srcDirs), 'dirDst': str(dirDst)})
-                thread1.start()
-                thread1.join()
+            if(args.duplicatecsv is not True):
+                if __name__ == '__main__':
+                    thread1 = threading.Thread(target=tran, kwargs={'srcDirs': str(srcDirs), 'dirDst': str(dirDst)})
+                    thread1.start()
+                    thread1.join()
 
             if args.debug == True:
                 print('   ' + 'Elapsed ' + ': ' + str((datetime.datetime.now() - procTimer).seconds) + 's' )
@@ -164,32 +177,37 @@ try:
                 findChildrenDir = pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) ))).exists()
 
                 if findChildrenDir != True:
-                    if args.debug == True:
+                    if(args.duplicatecsv is not True and args.debug == True):
                         logg_time=datetime.datetime.now()
                         print(str(logg_time.hour).zfill(2) + ':' + str(logg_time.minute).zfill(2) + ':' + str(logg_time.second).zfill(2) + '.' + '{:0<3}'.format(int(logg_time.microsecond/1000)) + ' ', end='')
-                    print('Transferring... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
+
+                    if(args.duplicatecsv is not True):
+                        print('Transferring... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
 
                     if args.debug == True:
                         print('   ' + 'From    ' + ': ' + str(srcChildrenDirs) )
                         print('   ' + 'To      ' + ': ' + str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))) )
 
-                    if __name__ == '__main__':
-                        thread1 = threading.Thread(target=tran, kwargs={'srcDirs': str(srcChildrenDirs), 'dirDst': str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) ))))})
-                        thread1.start()
-                        thread1.join()
+                    if(args.duplicatecsv is not True):
+                        if __name__ == '__main__':
+                            thread1 = threading.Thread(target=tran, kwargs={'srcDirs': str(srcChildrenDirs), 'dirDst': str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) ))))})
+                            thread1.start()
+                            thread1.join()
 
-                    if args.debug == True:
+                    if(args.duplicatecsv is not True and args.debug == True):
                         print('   ' + 'Elapsed ' + ': ' + str((datetime.datetime.now() - procTimer).seconds) + 's' )
 
                 else:
-                    if args.debug == True:
+                    if(args.duplicatecsv is not True and args.debug == True):
                         logg_time=datetime.datetime.now()
                         print(str(logg_time.hour).zfill(2) + ':' + str(logg_time.minute).zfill(2) + ':' + str(logg_time.second).zfill(2) + '.' + '{:0<3}'.format(int(logg_time.microsecond/1000)) + ' ', end='')
 
-                    print('Skipping....... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
-                    if args.debug == True:
+                    if(args.duplicatecsv is not True):
+                        print('Skipping....... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
 
-                        print('             ' + 'File count check: ',end='')
+                    if(args.duplicatecsv is True or args.debug == True):
+                        if(args.duplicatecsv is not True):
+                            print('             ' + 'File count check: ',end='')
                         tmp_internal_filesCount=[0, 0];
                         for tmp_dirpath in [
                             [
@@ -211,9 +229,14 @@ try:
                                     tmp_internal_filesCount[1]=tmp_dirpath[2]
 
                         if tmp_internal_filesCount[0]==tmp_internal_filesCount[1]:
-                            print('The same as destination.')
+                            if(args.duplicatecsv is not True):
+                                print('The same as destination.')
+                            else:
+                                logg_time=datetime.datetime.now()
+                                print(str(logg_time.hour).zfill(2) + ':' + str(logg_time.minute).zfill(2) + ':' + str(logg_time.second).zfill(2) + '.' + '{:0<3}'.format(int(logg_time.microsecond/1000)) + ',', end='')
+                                print('"' + str(srcChildrenDirs.relative_to(dirSrc)) + '"');
 
-                            if(args.trash is not None):
+                            if(args.duplicatecsv is not True and args.trash is not None):
 
                                 print('             Transferring... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
                                 print('                          To \'' + str(dirRecycleBin) + '\'')
@@ -224,11 +247,12 @@ try:
                                     thread1.join()
 
                         else:
-                            print('There isn\'t same as destination. ')
-                            print('             ' + 'Src: '+str(tmp_internal_filesCount[0]))
-                            print('             ' + 'Dst: '+str(tmp_internal_filesCount[1]))
+                            if(args.duplicatecsv is not True):
+                                print('There isn\'t same as destination. ')
+                                print('             ' + 'Src: '+str(tmp_internal_filesCount[0]))
+                                print('             ' + 'Dst: '+str(tmp_internal_filesCount[1]))
 
-                            if(args.trash is not None):
+                            if(args.duplicatecsv is not True and args.trash is not None):
                                 if( tmp_internal_filesCount[0] < tmp_internal_filesCount[1] ):
 
                                     print('             Transferring... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
