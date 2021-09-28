@@ -184,7 +184,7 @@ try:
                     if(args.duplicatecsv is not True):
                         print('Transferring... \'' + str(srcChildrenDirs.relative_to(dirSrc)) + '\'')
 
-                    if args.debug == True:
+                    if(args.duplicatecsv is not True and args.debug == True):
                         print('   ' + 'From    ' + ': ' + str(srcChildrenDirs) )
                         print('   ' + 'To      ' + ': ' + str(pathlib.Path(str(dirDst) + '/' + str(srcDirs.relative_to(dirSrc)) + '/' + str(srcChildrenDirs.relative_to(dirSrc + '/' + str(srcDirs.relative_to(dirSrc)) )))) )
 
