@@ -1,4 +1,4 @@
-# syncMove
+# [syncMove](https://github.com/n138-kz/syncMove)
 
 ```sh
 usage: syncMove.py [-h] [--debug] [--trash TRASH] [--duplicatecsv] SOURCE DEST
